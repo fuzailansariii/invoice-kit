@@ -28,8 +28,7 @@ export default function EmailVerificationForm({
   const {
     register,
     handleSubmit,
-    reset,
-    formState: { errors, isSubmitting },
+    formState: { isSubmitting },
   } = useForm<VerificationCodeFormSchema>({
     resolver: zodResolver(verificationCodeSchema),
     defaultValues: {
@@ -92,7 +91,7 @@ export default function EmailVerificationForm({
           </form>
           <div>
             <p className="font-quicksand mt-4 text-sm text-gray-600">
-              Didn't receive the code?{" "}
+              Didn&apos;t receive the code?{" "}
               <button
                 type="button"
                 onClick={resendCode}

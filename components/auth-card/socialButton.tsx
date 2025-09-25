@@ -1,17 +1,26 @@
-export default function SocialButton({
-  icon,
-  label,
-}: {
+interface SocialButtonProps {
+  onClick?: () => void;
   icon: React.ReactNode;
   label: string;
-}) {
+  disabled?: boolean;
+}
+
+export default function SocialButton({
+  onClick,
+  icon,
+  label,
+  disabled,
+}: SocialButtonProps) {
   return (
     <button
-      type="button"
-      aria-label={label}
-      className="flex w-full items-center justify-center rounded-lg border border-gray-300 px-4 py-3 transition-colors hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
+      onClick={onClick}
+      disabled={disabled}
+      className={`font-quicksand flex w-full items-center justify-center gap-2 rounded-md border px-4 py-2 hover:bg-gray-50 hover:text-black ${
+        disabled ? "cursor-not-allowed opacity-50" : ""
+      }`}
     >
       {icon}
+      <span className="text-sm">{label}</span>
     </button>
   );
 }

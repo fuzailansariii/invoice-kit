@@ -14,7 +14,6 @@ import { FcGoogle } from "react-icons/fc";
 import { ImGithub } from "react-icons/im";
 import {
   signUpSchema,
-  verificationCodeSchema,
   type SignUpFormSchema,
   type VerificationCodeFormSchema,
 } from "@/lib/schemas/auth";
@@ -22,6 +21,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import SocialButton from "@/components/auth-card/socialButton";
 import { useSignUp } from "@clerk/nextjs";
+import { OAuthStrategy } from "@clerk/types";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import EmailVerificationForm from "@/components/auth-card/emailVerificationForm";
@@ -29,6 +29,7 @@ import EmailVerificationForm from "@/components/auth-card/emailVerificationForm"
 export default function SignUp() {
   const [error, setError] = useState<string>("");
   const [isVerifying, setIsVerifying] = useState<boolean>(false);
+  const [isOAuthLoading, setIsOAuthLoading] = useState<boolean>(false);
   const router = useRouter();
 
   const {
@@ -98,6 +99,7 @@ export default function SignUp() {
           } else {
             // After successful verification
             console.log("User created successfully:", dbResult.message);
+            setIsVerifying(false);
             // Add: setSuccessMessage("Account created successfully! Redirecting...");
             setTimeout(() => router.push("/"), 1500); // Small delay to show success
           }
@@ -123,6 +125,32 @@ export default function SignUp() {
   if (isVerifying) {
     return <EmailVerificationForm handleVerify={handleEmailVerification} />;
   }
+
+  const handleGoogleSignUp = async () => {
+    if (!signUp || !isLoaded) {
+      setError("Sign-up service is not ready. Please try again.");
+      return;
+    }
+    setIsOAuthLoading(true);
+    setError("");
+    try {
+      await signUp.authenticateWithRedirect({
+        strategy: "oauth_google",
+        redirectUrl: "sign-up/sso-callback",
+        redirectUrlComplete: "/",
+      });
+    } catch (error) {
+      console.error("Google Sign-Up error", error);
+      if (error instanceof Error) {
+        setError(`Google sign-up failed: ${error.message}`);
+      } else {
+        setError("Google sign-up failed, Please try again.");
+      }
+      setIsOAuthLoading(false);
+    }
+  };
+
+  const handleGitHubSignUp = async () => {};
 
   return (
     <Container>
@@ -205,12 +233,10 @@ export default function SignUp() {
             </div>
             <div className="flex w-full gap-4">
               <SocialButton
+                onClick={handleGoogleSignUp}
                 icon={<FcGoogle className="h-6 w-6" />}
-                label="Sign-up with Google"
-              />
-              <SocialButton
-                icon={<ImGithub className="h-6 w-6" />}
-                label="Sign-up with GitHub"
+                label={isOAuthLoading ? "Connecting..." : "Google"}
+                disabled={isOAuthLoading}
               />
             </div>
           </div>

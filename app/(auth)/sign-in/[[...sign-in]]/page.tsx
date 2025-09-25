@@ -28,7 +28,6 @@ export default function SignIn() {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors, isSubmitting },
   } = useForm<SignInFormSchema>({
     resolver: zodResolver(signInSchema),
@@ -53,16 +52,16 @@ export default function SignIn() {
         setError("Sign-in failed. Please try again.");
         console.error("Sign-in not complete:", result);
       }
-    } catch (error: any) {
-      if (error.errors && error.errors[0]) {
-        setError(error.errors[0].message); // Clerk provides detailed errors
-      } else if (error instanceof Error) {
+    } catch (error) {
+      if (error instanceof Error) {
         setError(error.message);
       } else {
         setError("An unexpected error occurred");
       }
     }
   };
+
+  const handleGoogleSignIn = () => {};
 
   return (
     <Container className="">
@@ -77,7 +76,7 @@ export default function SignIn() {
           />
           <Title>Welcome Back</Title>
           <SubTitle>
-            Don't have an account yet?{" "}
+            Don&apos;t have an account yet?{" "}
             <Link
               href="/sign-up"
               className="cursor-pointer text-blue-600 underline hover:text-blue-800"
@@ -132,12 +131,9 @@ export default function SignIn() {
             </div>
             <div className="flex w-full gap-4">
               <SocialButton
+                onClick={handleGoogleSignIn}
                 icon={<FcGoogle className="h-6 w-6" />}
-                label="Sign-up with Google"
-              />
-              <SocialButton
-                icon={<ImGithub className="h-6 w-6" />}
-                label="Sign-up with GitHub"
+                label="Google"
               />
             </div>
           </div>
