@@ -1,25 +1,35 @@
 version: "3.8"
-
-services: 
+services:
   postgres:
     image: postgres
     ports:
       - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_USER: postgres  
+      POSTGRES_DB: invoicekit
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
 
   app:
-    build:
-      context: ./
-      dockerfile: ./Dockerfile
-    environment:
-      - DATABASE_URL=${DATABASE_URL}
-      - NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
-      - CLERK_SECRET_KEY=${CLERK_SECRET_KEY}
-    ports: 
+    build: .
+    ports:
       - "3000:3000"
+    develop:
+      watch:
+        - action: sync
+          path: .
+          target: /app
+          ignore:
+            - node_modules/
+            - .git/
+            - .next/
+            - dist/
+            - build/
+    environment:
+      DATABASE_URL: postgresql://postgres:mysecretpassword@postgres:5432/invoicekit
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+      CLERK_SECRET_KEY: ${CLERK_SECRET_KEY}
     depends_on:
       - postgres
 
