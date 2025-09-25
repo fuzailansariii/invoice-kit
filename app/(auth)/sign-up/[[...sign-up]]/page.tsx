@@ -11,7 +11,6 @@ import Button from "@/components/auth-card/button";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { FcGoogle } from "react-icons/fc";
-import { ImGithub } from "react-icons/im";
 import {
   signUpSchema,
   type SignUpFormSchema,
@@ -21,7 +20,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import SocialButton from "@/components/auth-card/socialButton";
 import { useSignUp } from "@clerk/nextjs";
-import { OAuthStrategy } from "@clerk/types";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import EmailVerificationForm from "@/components/auth-card/emailVerificationForm";
@@ -150,7 +148,7 @@ export default function SignUp() {
     }
   };
 
-  const handleGitHubSignUp = async () => {};
+  // const handleGitHubSignUp = async () => {};
 
   return (
     <Container>

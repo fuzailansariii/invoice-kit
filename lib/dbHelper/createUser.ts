@@ -40,7 +40,8 @@ export async function SaveUser({
       email,
     };
   } catch (error) {
-    console.error("Error creating the user");
+    if (error instanceof Error)
+      console.error("Error creating the user", error.message);
     return null;
   }
 }

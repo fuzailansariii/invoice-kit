@@ -11,7 +11,6 @@ import Button from "@/components/auth-card/button";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { FcGoogle } from "react-icons/fc";
-import { ImGithub } from "react-icons/im";
 import { useSignIn } from "@clerk/nextjs";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
