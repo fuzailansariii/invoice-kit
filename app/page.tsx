@@ -7,6 +7,8 @@ export default function Home() {
   const { signOut } = useClerk();
   const { user } = useClerk();
   console.log("User:", user?.id);
+  console.log("remerge the code");
+
   return (
     <Container className="">
       <div className="flex h-full items-center justify-center">
