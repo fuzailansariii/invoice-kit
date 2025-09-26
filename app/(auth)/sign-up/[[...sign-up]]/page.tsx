@@ -20,15 +20,15 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import SocialButton from "@/components/auth-card/socialButton";
 import { useSignUp } from "@clerk/nextjs";
-import axios, { AxiosError } from "axios";
-import { useRouter } from "next/navigation";
+// import axios, { AxiosError } from "axios";
+// import { useRouter } from "next/navigation";
 import EmailVerificationForm from "@/components/auth-card/emailVerificationForm";
 
 export default function SignUp() {
   const [error, setError] = useState<string>("");
   const [isVerifying, setIsVerifying] = useState<boolean>(false);
   const [isOAuthLoading, setIsOAuthLoading] = useState<boolean>(false);
-  const router = useRouter();
+  // const router = useRouter();
 
   const {
     register,
@@ -48,7 +48,7 @@ export default function SignUp() {
     if (!isLoaded) return;
     try {
       const { username, email, password } = data;
-      const finalUsername = username.trim();
+      const finalUsername = username?.trim();
       const finalEmail = email.trim();
       const finalPassword = password.trim();
       if (!finalEmail || !finalUsername || !finalPassword) {
@@ -86,32 +86,6 @@ export default function SignUp() {
       if (result.status === "complete") {
         await setActive({ session: result.createdSessionId });
         // TODO: add toast notificatino for email verification successfully
-        try {
-          const response = await axios.post("/api/create-user");
-          const dbResult = await response.data;
-          if (response.status !== 201) {
-            console.error(
-              "Failed to create user in the database",
-              dbResult.error,
-            );
-          } else {
-            // After successful verification
-            console.log("User created successfully:", dbResult.message);
-            setIsVerifying(false);
-            // Add: setSuccessMessage("Account created successfully! Redirecting...");
-            setTimeout(() => router.push("/"), 1500); // Small delay to show success
-          }
-        } catch (error) {
-          if (error instanceof AxiosError) {
-            setError(
-              error instanceof Error
-                ? error.message
-                : "An unexpected error occurred",
-            );
-          } else {
-            console.error("An unexpected error occurred", error);
-          }
-        }
       }
     } catch (error) {
       if (error instanceof Error) {
