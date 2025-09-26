@@ -28,7 +28,6 @@ export default function SignUp() {
   const [isVerifying, setIsVerifying] = useState<boolean>(false);
   const [isOAuthLoading, setIsOAuthLoading] = useState<boolean>(false);
 
-
   const {
     register,
     handleSubmit,
@@ -50,6 +49,7 @@ export default function SignUp() {
 
       const finalEmail = email.trim();
       const finalPassword = password.trim();
+      const finalUsername = username.trim();
       if (!finalEmail || !finalUsername || !finalPassword) {
         throw new Error("All input fields are required");
       }
