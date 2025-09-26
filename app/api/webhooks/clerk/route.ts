@@ -16,10 +16,14 @@ export async function POST(req: NextRequest) {
 
       const id = user.id;
       const email = user.email_addresses?.[0]?.email_address || "";
+      const username =
+        user.username ||
+        [user.first_name, user.last_name].filter(Boolean).join(" ") ||
+        email.split("@")[0];
       const profileData = {
         clerkId: user.id,
         email,
-        username: user.username,
+        username,
         profile_url: user.image_url || "",
       };
 
