@@ -20,15 +20,14 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import SocialButton from "@/components/auth-card/socialButton";
 import { useSignUp } from "@clerk/nextjs";
-// import axios, { AxiosError } from "axios";
-// import { useRouter } from "next/navigation";
+
 import EmailVerificationForm from "@/components/auth-card/emailVerificationForm";
 
 export default function SignUp() {
   const [error, setError] = useState<string>("");
   const [isVerifying, setIsVerifying] = useState<boolean>(false);
   const [isOAuthLoading, setIsOAuthLoading] = useState<boolean>(false);
-  // const router = useRouter();
+
 
   const {
     register,
@@ -48,7 +47,7 @@ export default function SignUp() {
     if (!isLoaded) return;
     try {
       const { username, email, password } = data;
-      const finalUsername = username?.trim();
+
       const finalEmail = email.trim();
       const finalPassword = password.trim();
       if (!finalEmail || !finalUsername || !finalPassword) {
